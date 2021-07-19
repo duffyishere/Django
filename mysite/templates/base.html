@@ -19,12 +19,18 @@
     </button>
     <div class="collapse navbar-collapse flex-grow-0" id="navbarNav">
         <ul class="navbar-nav">
+            {% if user.is_authenticated %}
+            <li class="nav-item ">
+                <a class="nav-link" href="{% url 'common:logout' %}">{{ user.username }} (로그아웃)</a>
+            </li>
+            {% else %}
             <li class="nav-item ">
                 <a class="nav-link" href="{% url 'common:login' %}">로그인</a>
             </li>
             <li class="nav-item ">
                 <a class="nav-link" href="#">회원가입</a>
             </li>
+            {% endif %}
         </ul>
     </div>
 </nav>
