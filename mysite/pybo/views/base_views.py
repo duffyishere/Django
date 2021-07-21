@@ -2,7 +2,7 @@ from django.core.paginator import Paginator
 from django.db.models import Q, Count
 from django.shortcuts import render, get_object_or_404
 
-from pybo.models import Question
+from pybo.models import Question, Answer
 
 
 def index(request):
@@ -36,7 +36,14 @@ def index(request):
     return render(request, 'pybo/question_list.html', context)
 
 def detail(request, question_id):
+    page = request.GET.get('page', '1')
+
     question = get_object_or_404(Question, pk=question_id)
-    context = {'question': question}
+    answer_list = Answer.objects.filter(question=question).order_by('-create_date')
+
+    paginator = Paginator(answer_list, 5)
+    page_obj = paginator.get_page(page)
+
+    context = {'question': question, 'answer_list': page_obj}
 
     return render(request, 'pybo/question_detail.html', context)
